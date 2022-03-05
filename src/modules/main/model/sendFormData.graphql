@@ -1,0 +1,7 @@
+mutation SendFormData($data: Json) {
+  create(data: $data, type: "FormResult") {
+    document {
+      id
+    }
+  }
+}

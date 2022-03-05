@@ -1,0 +1,10 @@
+node_modules/*
+build/*
+*.json
+*/*.test.{js, jsx}
+*.md
+*.stories.js
+*.test.js
+jest.config.js
+next.config.js
+**/__generated__/*

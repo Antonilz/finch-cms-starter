@@ -1,0 +1,29 @@
+stages:
+ - redeploy
+
+Redeploy_dev:
+  image: docker/compose
+  tags:
+    - demo
+    - site
+  stage: redeploy
+  script:
+    - docker-compose down || true
+    - docker-compose up --build -d
+  only:
+    - develop
+
+Redeploy_master:
+  image: docker/compose
+  tags:
+    - prod
+    - site
+  stage: redeploy
+  script:
+    - apk add curl
+    - docker-compose down || true
+    - docker-compose up --build -d && while true; do curl -I -s "http://10.10.120.10:5657" && break; sleep 1;done
+    - docker-compose -f docker-compose-bkp.yml down || true
+    - docker-compose -f docker-compose-bkp.yml up --build -d
+  only:
+    - master

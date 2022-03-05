@@ -1,0 +1,43 @@
+overwrite: true
+schema: 'schema.graphql'
+documents: 'src/**/*.graphql'
+hooks:
+  afterOneFileWrite:
+    - prettier --write
+    - npx eslint --fix --max-warnings 300
+generates:
+  src/__generated__/types.ts:
+    plugins:
+      - typescript
+    config:
+      avoidOptionals: true
+      preResolveTypes: true
+      maybeValue: 'T'
+      scalars:
+        DateTime: 'string'
+        Image: 'string'
+        Text: 'string'
+        JSON: 'string'
+  src/:
+    preset: near-operation-file
+    presetConfig:
+      folder: __generated__
+      extension: .tsx
+      baseTypesPath: __generated__/types.ts
+    plugins:
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      addDocBlocks: false
+      avoidOptionals:
+        field: true
+        inputValue: false
+        object: false
+        defaultValue: false
+      pureMagicComment: true
+      preResolveTypes: true
+      scalars:
+        DateTime: 'string'
+        Image: 'string'
+        Text: 'string'
+        JSON: 'string'

@@ -1,0 +1,11 @@
+query GetWebConfigs($filters: [InputFilter]) {
+  WebConfigQuery {
+    list(filters: $filters) {
+      documents {
+        title
+        bodyscript
+        headscript
+      }
+    }
+  }
+}
