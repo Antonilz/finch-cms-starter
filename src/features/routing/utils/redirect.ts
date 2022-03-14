@@ -8,6 +8,8 @@ type RedirectParams = {
   params?: Params;
   replace?: boolean;
   hash?: string;
+
+  options?: { shallow?: boolean; locale?: string | false; scroll?: boolean };
 };
 
 export const redirect = ({

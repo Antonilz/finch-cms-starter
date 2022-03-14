@@ -3,7 +3,7 @@ import { ApolloProvider } from '@apollo/client';
 import { ReduxWrapper } from '~model/store';
 import { RedirectCheck } from '~components/RedirectCheck';
 import { GlobalStyles } from '~components/GlobalStyles';
-import { useApollo } from '~utils/apolloClient';
+import { useApollo } from '~features/services';
 import { useResizeObserver } from '~features/ui/hooks/useResizeObserver';
 import 'normalize.css';
 

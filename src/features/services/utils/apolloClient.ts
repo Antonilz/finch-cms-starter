@@ -1,5 +1,4 @@
 import type { AppProps } from 'next/app';
-
 import { useMemo } from 'react';
 import {
   ApolloClient,
@@ -9,7 +8,9 @@ import {
 } from '@apollo/client';
 import merge from 'deepmerge';
 import isEqual from 'lodash/isEqual';
+
 import { envConfig } from '~constants/envConfig';
+import { offsetLimitPagination } from './offsetLimitPagination';
 
 const env = process.env.NODE_ENV === 'production' ? 'PROD' : 'DEV';
 
@@ -24,7 +25,15 @@ const createApolloClient = () =>
       uri: envConfig[env].apiEndpoint,
       credentials: 'same-origin',
     }),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        ArticleQuery: {
+          fields: {
+            list: offsetLimitPagination(['filters', 'orders'], 'documents'),
+          },
+        },
+      },
+    }),
   });
 
 export const initApollo = (initialState = null) => {

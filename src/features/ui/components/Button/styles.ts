@@ -79,8 +79,8 @@ export const Button = styled.button.withConfig({
   $fluid: boolean;
   $hasIcon?: boolean;
 }>`
-  ${({ route, $fluid, $hasIcon }) => css`
-    ${route ? null : ''} {
+  ${({ $fluid, $hasIcon }) => css`
+     {
       align-items: center;
       background-color: transparent;
       color: ${colors.grey.white};
@@ -94,7 +94,6 @@ export const Button = styled.button.withConfig({
         border-color 150ms linear, background-color 150ms linear,
         opacity 150ms linear;
       width: ${$fluid ? '100%' : 'auto'};
-      /* appearance added for fixing Safari link button border bug */
       appearance: none;
 
       ::-moz-focus-inner {

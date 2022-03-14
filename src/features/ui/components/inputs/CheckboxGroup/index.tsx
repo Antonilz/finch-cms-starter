@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
+import { InputProps } from '../types';
 import { Checkbox } from '../Checkbox';
 
-type CheckboxGroupProps = {
+type CheckboxGroupProps = InputProps<string[]> & {
   options: { value: string; label: React.ReactNode }[];
   name: string;
 };
@@ -21,6 +22,7 @@ export const CheckboxGroup = ({
         <Checkbox
           onChange={(e) => {
             const valuesSet = new Set(groupValue);
+
             if (e.target.checked) {
               valuesSet.add(e.target.value);
             } else {

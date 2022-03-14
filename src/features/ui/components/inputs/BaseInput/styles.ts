@@ -7,14 +7,17 @@ export const inputHeight = 40;
 
 export const inputHorizontalPadding = 16;
 
-export const FormControl = styled.div`
+export const FormControl = styled.div<{
+  isInvalid: boolean;
+  isRequired: boolean;
+}>`
   display: flex;
   flex-direction: column;
   position: relative;
   width: 220px;
 `;
 
-export const InputWrapper = styled.div`
+export const InputWrapper = styled.div<{ hasError: boolean }>`
   align-items: center;
   line-height: 21px;
   display: flex;
@@ -38,10 +41,12 @@ const activeLabelStyles = css`
   }
 `;
 
-export const TextInputLabel = styled(Label).attrs(({ hasError }) => ({
-  element: 'label',
-  color: hasError ? colors.utils.alertRed : colors.grey.A500,
-}))`
+export const TextInputLabel = styled(Label).attrs(
+  ({ hasError }: { hasError: boolean }) => ({
+    element: 'label',
+    color: hasError ? colors.utils.alertRed : colors.grey.A500,
+  })
+)<{ hasError: boolean; isActive: boolean; isRequired: boolean }>`
   ${({ hasError, isActive, isRequired }) => css`
     background-color: transparent;
     display: flex;

@@ -7,9 +7,9 @@ export interface InputProps<T> {
   touched?: boolean;
   error?: string;
   helperText?: string;
-  label?: string;
+  label?: string | React.ReactNode;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: (event: React.ChangeEvent<T>) => void;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
   value?: T;
   type?: string;

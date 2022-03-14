@@ -1,8 +1,7 @@
+import { Hero as HeroProps } from '../../types';
 import { Wrapper, Title, Text } from './styles';
 
-import { Hero as HeroProps } from '../../types';
-
-export const Hero: React.FC<HeroProps> = ({ title, text }) => (
+export const Hero = ({ title, text }: HeroProps) => (
   <Wrapper>
     <Title dangerouslySetInnerHTML={{ __html: title }} />
     <Text dangerouslySetInnerHTML={{ __html: text }} />

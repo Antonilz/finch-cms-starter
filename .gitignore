@@ -92,3 +92,5 @@ $RECYCLE.BIN/
 
 # testing
 /coverage
+
+*.tsbuildinfo

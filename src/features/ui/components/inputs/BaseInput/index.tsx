@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FocusEvent } from 'react';
 
 import { InputProps } from '../types';
 import { Label } from '../Label';
@@ -10,14 +10,21 @@ import {
   TextInputLabel,
 } from './styles';
 
-const DefaultInput = (props: InputProps<string>) => <Input {...props} />;
+const DefaultInput = <
+  V extends string | number | readonly string[] | undefined
+>(
+  props: InputProps<V>
+) => <Input {...props} />;
 
 type BaseInputProps<Value, As extends React.ElementType> = {
   as?: As;
 } & InputProps<Value> &
   Omit<React.ComponentPropsWithoutRef<As>, keyof InputProps<Value>>;
 
-export const BaseInput = <Value, C extends React.ElementType>(
+export const BaseInput = <
+  Value extends string | number | readonly string[] | undefined,
+  C extends React.ElementType
+>(
   props: BaseInputProps<Value, C>
 ) => {
   const {
@@ -34,14 +41,14 @@ export const BaseInput = <Value, C extends React.ElementType>(
   const InputComponent = as || DefaultInput;
   const LabelComponent = as ? Label : TextInputLabel;
   const hasLabel = Boolean(label);
-  const hasError = invalid && error;
+  const hasError = Boolean(invalid && error);
 
-  const handleFocus = (ev) => {
+  const handleFocus = (ev: FocusEvent<HTMLInputElement>) => {
     onFocus?.(ev);
     setIsFocused(true);
   };
 
-  const handleBlur = (ev) => {
+  const handleBlur = (ev: FocusEvent<HTMLInputElement>) => {
     onBlur?.(ev);
     setIsFocused(false);
   };

@@ -1,4 +1,6 @@
-import { useTheme } from '~hooks/useTheme';
+import { useColorScheme } from '~features/ui/hooks/useColorScheme';
+import { Block as BlockProps } from '../../types';
+import { BlockSizeVariants } from './types';
 import {
   Wrapper,
   Header,
@@ -13,8 +15,6 @@ import {
   Counter,
   Button,
 } from './styles';
-import { Block as BlockProps } from '../../types';
-import { BlockSizeVariants } from './types';
 
 const getBlockType = (dataLength?: number) => {
   if (dataLength === 3) {
@@ -45,7 +45,7 @@ export const Block: React.FC<BlockProps> = ({
 }) => {
   const blockType = getBlockType(blocks?.length);
 
-  const [data] = useTheme();
+  const [data] = useColorScheme();
   const isDarkTheme = Boolean(data?.isDarkTheme);
 
   return (

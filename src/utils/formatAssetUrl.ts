@@ -1,3 +1,5 @@
+import { stringify } from 'qs';
+
 import { envConfig } from '~constants/envConfig';
 
 enum optionsKeys {
@@ -5,18 +7,9 @@ enum optionsKeys {
   height = 'h',
 }
 
-type OptionsProps = { [key in keyof typeof optionsKeys]: number };
+type OptionsProps = { [key in keyof typeof optionsKeys]: number | string };
 
 const env = process.env.NODE_ENV === 'production' ? 'PROD' : 'DEV';
-
-function stringifyOptions(options: OptionsProps) {
-  return Object.entries(options)
-    .map(
-      ([name, value]) =>
-        `${optionsKeys[name as keyof typeof optionsKeys]}=${value}`
-    )
-    .join('=');
-}
 
 export const formatAssetUrl = ({
   url,
@@ -29,7 +22,7 @@ export const formatAssetUrl = ({
     return `${envConfig[env].assetPrefix}/images/${url}`;
   }
 
-  const stringifiedOptions = stringifyOptions(options);
+  const stringifiedOptions = stringify(options);
 
   // eslint-disable-next-line
   return `${envConfig[env].assetPrefix}/imagesweserv/?${stringifiedOptions}&fit=cover&url=${envConfig[env].assetPrefix}/images/${url}`;

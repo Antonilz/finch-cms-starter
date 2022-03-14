@@ -7,10 +7,9 @@ import { LocaleSelect } from '~features/i18n';
 import {
   Wrapper,
   Header as StyledHeader,
-  Logo,
+  // Logo,
   Link as StyledLink,
 } from './styles';
-import finchLogo from './assets/logo.svg';
 
 export const Header: React.FC<{
   navLinks?: Array<{ data: LinkProps }>;

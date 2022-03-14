@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 import { colors } from '../../../constants/colors';
 
-export const Wrapper = styled.div<{ isDisabled: boolean }>`
+export const Wrapper = styled.div<{ isDisabled?: boolean }>`
   display: flex;
   flex-wrap: wrap;
   position: relative;
@@ -13,7 +13,7 @@ export const Wrapper = styled.div<{ isDisabled: boolean }>`
 
 const checkIconColor = 'var(--text-color)';
 
-export const Checkbox = styled.i<{ checked: boolean }>`
+export const Checkbox = styled.i<{ checked?: boolean }>`
   display: flex;
   box-sizing: border-box;
 
@@ -88,7 +88,7 @@ export const Input = styled.input.attrs(() => ({ type: 'checkbox' }))`
     `};
 `;
 
-export const InputWrapper = styled.label<{ isDisabled: boolean }>`
+export const InputWrapper = styled.label<{ isDisabled?: boolean }>`
   ${({ isDisabled }) => css`
     position: relative;
     display: flex;

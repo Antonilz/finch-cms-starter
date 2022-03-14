@@ -1,4 +1,3 @@
-// import { MetaTags } from '~components/MetaTags/types';
 import { Link } from '~features/ui/types';
 import { Hero } from './components/Hero';
 
@@ -17,17 +16,6 @@ export type MenuData = {
   code: string;
 };
 
-export type Block = TextField & {
-  type: `${BlockTypes}`;
-  tags: DataField<Tag>;
-  fulltext?: string;
-  counters: boolean;
-  blocks: DataField<BlockItem>;
-  buttonHref?: string;
-  buttonTitle?: string;
-  compact?: boolean;
-};
-
 type BlockItem = TextField & {
   image: string;
   darkThemeImage: string;
@@ -40,53 +28,50 @@ export const enum BlockTypes {
   HERO = 'Hero',
   BLOCK = 'FinchSitePageBlock',
   INTERVIEW = 'Interview',
-  NEW_YEAR = 'NewYear',
   FORM = 'Form',
 }
+
+export type Block = TextField & {
+  type: `${BlockTypes}`;
+  tags: DataField<Tag>;
+  fulltext?: string;
+  counters: boolean;
+  blocks: DataField<BlockItem>;
+  buttonHref?: string;
+  buttonTitle?: string;
+  compact?: boolean;
+};
 
 type TextField = {
   title: string;
   text: string;
 };
 
-export type Hero = TextField & {
-  type: `${BlockTypes}`;
+export type Hero = TextField;
+
+type Tag = {
+  title: string;
 };
 
-export type NewYear = TextField & {
-  url: string;
-  button: DataField<Button>;
+export type Tags = {
+  items: DataField<Tag>;
 };
 
-type PageDataItem<
-  T extends
-    | BlockTypes.HERO
-    | BlockTypes.BLOCK
-    | BlockTypes.NEW_YEAR
-    | BlockTypes.FORM
-> = {
-  type: T;
-  data: PageBlock<T>;
+export type PageBlocks = {
+  [BlockTypes.HERO]: TextField;
+  [BlockTypes.BLOCK]: Block;
 };
 
-export type PageBlock<T> = T extends BlockTypes.HERO
-  ? Hero
-  : T extends BlockTypes.BLOCK
-  ? Block
-  : T extends BlockTypes.NEW_YEAR
-  ? NewYear
-  : null;
+export type PageDataItem = {
+  [P in keyof PageBlocks]: { type: P; data: PageBlocks[P] };
+}[keyof PageBlocks];
 
 export type PageData = {
   title: string;
   description: string;
   image: string;
   article: boolean;
-  blocks: Array<
-    | PageDataItem<BlockTypes.HERO>
-    | PageDataItem<BlockTypes.BLOCK>
-    | PageDataItem<BlockTypes.NEW_YEAR>
-  >;
+  blocks: Array<PageDataItem>;
   lead: DataField<Interview, BlockTypes.INTERVIEW>;
   urn: string;
   black: boolean;
@@ -117,12 +102,4 @@ export type Interview = TextField & {
   socialLinks?: DataField<Link>;
   signUpButton: DataField<Button>;
   gradientColor: string;
-};
-
-type Tag = {
-  title: string;
-};
-
-export type Tags = {
-  items: DataField<Tag>;
 };

@@ -6,13 +6,18 @@ import { Label } from '~features/ui/components/inputs/Label';
 import { Container } from '~features/ui/components/Container';
 import { Button } from '~features/ui/components/Button';
 
-export const FormBlock = ({ blocks, name }) => {
+type FormBlockProps = {
+  blocks: { data: { label: string; fields: string } }[];
+  name: string;
+};
+
+export const FormBlock = ({ blocks, name }: FormBlockProps) => {
   const [sendFormData, { loading }] = useSendFormDataMutation();
 
   const formBlocks = useMemo(() => {
     return blocks.map(({ data: { label, fields } }) => ({
       label,
-      fields: JSON.parse(fields),
+      fields: JSON.parse(fields) as { name: string; value?: string }[],
     }));
   }, [blocks]);
 
@@ -22,7 +27,7 @@ export const FormBlock = ({ blocks, name }) => {
     formState: { isSubmitSuccessful },
   } = useForm();
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: { [key: string]: string | string[] }) => {
     console.log(values, name);
     await sendFormData({
       variables: {

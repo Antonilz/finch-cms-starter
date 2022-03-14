@@ -1,5 +1,6 @@
 import { forwardRef, useCallback } from 'react';
 
+import { InputProps } from '../types';
 import {
   Checkbox as StyledCheckbox,
   CheckboxWrapper,
@@ -11,7 +12,13 @@ import {
   ErrorMessage,
 } from './styles';
 
-export const Checkbox = forwardRef(
+type CheckboxProps = Omit<InputProps<string>, 'onChange'> & {
+  checked?: boolean;
+  width?: number;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+};
+
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
       checked,
@@ -48,6 +55,7 @@ export const Checkbox = forwardRef(
               ref={ref}
               value={value}
               {...props}
+              type="checkbox"
             />
             <CheckboxWrapper>
               <StyledCheckbox checked={checked} />

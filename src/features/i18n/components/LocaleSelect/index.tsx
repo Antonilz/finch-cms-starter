@@ -5,14 +5,13 @@ import { redirect } from '~features/routing';
 import { useOnClickOutside } from '~features/ui/hooks/useOnClickOutside';
 import { locales } from '../../constants/locales';
 import { getSavedLocale, setSavedLocale } from '../../utils/cookieHelpers';
-
 import { Label, Wrapper, Options, Option, CurrentValue } from './styles';
 
 export const LocaleSelect = () => {
   const { pathname, query } = useRouter();
   const [currentLocale, setCurrentLocale] = useState<string>(getSavedLocale());
 
-  const dropdownRef = useRef<HTMLDivElement>();
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useOnClickOutside(dropdownRef, () => {
@@ -25,7 +24,7 @@ export const LocaleSelect = () => {
     setIsDropdownOpen(false);
     redirect({
       route: pathname,
-      params: query,
+      params: query as Record<string, string>,
       options: { locale: value },
     });
   };

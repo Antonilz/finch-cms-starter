@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 
-import { initApollo } from '~utils/apolloClient';
+import { initApollo } from '~features/services';
 
 const query = gql`
   query Theme {
@@ -12,7 +12,7 @@ const query = gql`
   }
 `;
 
-export const useTheme = () => {
+export const useColorScheme = () => {
   const apolloClient = initApollo();
 
   const setTheme = useCallback(

@@ -1,36 +1,26 @@
 import { useRouter } from 'next/router';
+import { GetStaticPropsContext } from 'next';
 
-import { initApollo, addApolloState } from '~utils/apolloClient';
+import { initApollo, addApolloState } from '~features/services';
 import { MetaTags } from '~components/MetaTags';
 import { HeadScripts, BodyScripts } from '~components/Metrics';
+import { locales } from '~features/i18n';
 import getPageData from '../../model/getPageData.graphql';
 import getPageUrn from '../../model/getPageUrn.graphql';
 import getWebConfigs from '../../model/getWebConfigs.graphql';
-import { View } from '../View';
-import { Hero } from '../Hero';
-import { Block } from '../Block';
-import { GlobalTheme } from '../GlobalTheme';
-
 import {
   PageData,
   PageMenuTypes,
   MenuData,
   BlockTypes,
-  PageBlock,
   ConfigData,
 } from '../../types';
-import { locales } from '~features/i18n';
-
-type Params = {
-  params: {
-    urn: string;
-  };
-};
+import { View } from '../View';
+import { Hero } from '../Hero';
+import { Block } from '../Block';
+import { GlobalTheme } from '../GlobalTheme';
 
 const getPageDataByUrn = (data: Array<PageData>) => data[0];
-
-const getLeadMenuData = (data: Array<MenuData>) =>
-  data.find(({ code }) => code === PageMenuTypes.LEAD)?.items;
 
 const getPageMenuData = (data: Array<MenuData>, locale: string) =>
   data.find(
@@ -52,17 +42,15 @@ const getBodyScripts = (configs: Array<ConfigData>) =>
     configs.map(({ bodyscript }) => bodyscript).filter(Boolean)
   );
 
-export function MainPage({
-  pageData,
-  menuData,
-  configs,
-}: {
+type MainPageProps = {
   pageData: Array<PageData>;
   menuData: Array<MenuData>;
   configs: Array<ConfigData>;
-}) {
+};
+
+export function MainPage({ pageData, menuData, configs }: MainPageProps) {
   const {
-    query: { urn },
+    // query: { urn },
     locale = locales.RU,
     isFallback,
   } = useRouter();
@@ -76,7 +64,6 @@ export function MainPage({
   const { title, description, image, blocks, article, black: dark } = data;
 
   const pageMenu = getPageMenuData(menuData, locale);
-  const leadMenu = getLeadMenuData(menuData);
   const bodyScripts = getBodyScripts(configs);
   const headScripts = getHeadScripts(configs);
 
@@ -84,26 +71,15 @@ export function MainPage({
     <>
       <MetaTags title={title} description={description} image={image} />
       {headScripts && <HeadScripts text={headScripts} />}
-      <View navLinks={pageMenu} socialLinks={leadMenu}>
+      <View navLinks={pageMenu}>
         <GlobalTheme dark={dark} />
         {blocks.map(({ type, data: blockData }, index) => {
           if (type === BlockTypes.BLOCK) {
-            return (
-              <Block
-                key={index}
-                compact={article}
-                {...(blockData as PageBlock<BlockTypes.BLOCK>)}
-              />
-            );
+            return <Block key={index} compact={article} {...blockData} />;
           }
 
           if (type === BlockTypes.HERO) {
-            return (
-              <Hero
-                key={index}
-                {...(blockData as PageBlock<BlockTypes.HERO>)}
-              />
-            );
+            return <Hero key={index} {...blockData} />;
           }
 
           // if (type === BlockTypes.FORM) {
@@ -123,14 +99,11 @@ export function MainPage({
   );
 }
 
-export async function getStaticProps(context: Params) {
+export async function getStaticProps(context: GetStaticPropsContext) {
   try {
     const apolloClient = initApollo();
-    const {
-      params: { urn },
-      locale,
-    } = context;
-
+    const { params = {}, locale } = context;
+    const urn = params.urn as string;
     /**
      * https://nextjs.org/docs/basic-features/data-fetching#getstaticpaths-static-generation
      * We use an optional catch-all route, so Next.js will
