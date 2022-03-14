@@ -2,9 +2,10 @@ import styled, { css } from 'styled-components';
 import { Link as DefaultLink } from '~features/routing';
 import { media } from '~theme/breakpoints';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.footer`
   padding-top: 110px;
   padding-bottom: 24px;
+  margin-top: auto;
 
   ${media.down('xl')} {
     padding-bottom: 80px;

@@ -13,7 +13,13 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    disableStaticImages: true,
+    domains: ['https://app.cms.finch.fm'],
+    deviceSizes: [640, 760, 828, 1080, 1200, 1920],
+    imageSizes: [300, 380, 640, 1024, 1280],
+    // Workaround to support 'next export' with next/image
+    // https://github.com/vercel/next.js/issues/21079
+    loader: 'imgix',
+    path: 'https://noop/',
   },
   i18n: {
     locales: ['en', 'ru'],

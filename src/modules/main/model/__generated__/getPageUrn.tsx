@@ -1,79 +1,56 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
 import * as Types from '../../../../__generated__/types';
 
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type PageUrnQueryQueryVariables = Types.Exact<{ [key: string]: never }>;
+export type PageUrnQueryVariables = Types.Exact<{ [key: string]: never }>;
 
-export type PageUrnQueryQuery = {
+export type PageUrnQuery = {
   __typename?: 'Query';
-  FinchSitePageQuery:
-    | {
-        __typename?: 'FinchSitePageQuery';
-        list:
-          | {
-              __typename?: 'FinchSitePageList';
-              documents:
-                | Array<
-                    | {
-                        __typename?: 'FinchSitePageOut';
-                        urn: string | null | undefined;
-                      }
-                    | null
-                    | undefined
-                  >
-                | null
-                | undefined;
-            }
-          | null
-          | undefined;
-      }
-    | null
-    | undefined;
+  PageQuery: {
+    __typename?: 'PageQuery';
+    list: {
+      __typename?: 'PageList';
+      documents: Array<{
+        __typename?: 'PageOut';
+        url: string | null;
+      } | null> | null;
+    } | null;
+  } | null;
 };
 
-export const PageUrnQueryDocument = /* #__PURE__ */ gql`
-  query PageUrnQuery {
-    FinchSitePageQuery {
+export const PageUrnDocument = /*#__PURE__*/ gql`
+  query PageUrn {
+    PageQuery {
       list {
         documents {
-          urn
+          url
         }
       }
     }
   }
 `;
-export function usePageUrnQueryQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    PageUrnQueryQuery,
-    PageUrnQueryQueryVariables
-  >
+export function usePageUrnQuery(
+  baseOptions?: Apollo.QueryHookOptions<PageUrnQuery, PageUrnQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PageUrnQueryQuery, PageUrnQueryQueryVariables>(
-    PageUrnQueryDocument,
+  return Apollo.useQuery<PageUrnQuery, PageUrnQueryVariables>(
+    PageUrnDocument,
     options
   );
 }
-export function usePageUrnQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    PageUrnQueryQuery,
-    PageUrnQueryQueryVariables
-  >
+export function usePageUrnLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<PageUrnQuery, PageUrnQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PageUrnQueryQuery, PageUrnQueryQueryVariables>(
-    PageUrnQueryDocument,
+  return Apollo.useLazyQuery<PageUrnQuery, PageUrnQueryVariables>(
+    PageUrnDocument,
     options
   );
 }
-export type PageUrnQueryQueryHookResult = ReturnType<
-  typeof usePageUrnQueryQuery
->;
-export type PageUrnQueryLazyQueryHookResult = ReturnType<
-  typeof usePageUrnQueryLazyQuery
->;
-export type PageUrnQueryQueryResult = Apollo.QueryResult<
-  PageUrnQueryQuery,
-  PageUrnQueryQueryVariables
+export type PageUrnQueryHookResult = ReturnType<typeof usePageUrnQuery>;
+export type PageUrnLazyQueryHookResult = ReturnType<typeof usePageUrnLazyQuery>;
+export type PageUrnQueryResult = Apollo.QueryResult<
+  PageUrnQuery,
+  PageUrnQueryVariables
 >;

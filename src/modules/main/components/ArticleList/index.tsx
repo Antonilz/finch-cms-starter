@@ -1,21 +1,28 @@
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
 
 import { InfiniteScroll } from '~features/layout/components/InfiniteScroll';
-import { Container as DefaultContainer } from '~features/ui/components/Container';
-import getArticlesData from '~model/services/getArticlesData.query.graphql';
+import { Container, Link } from '~features/ui';
+import { FilterOperator } from '~types';
+import { usePageDataQuery } from '../../model/__generated__/getPageData';
 
-export const List = () => {
+export const ArticleList = () => {
   const [page, setPage] = useState(0);
 
-  const { loading, error, data, fetchMore } = useQuery(getArticlesData, {
+  const { loading, error, data, fetchMore } = usePageDataQuery({
     variables: {
       page,
       pageSize: 40,
+      filters: [
+        {
+          field: 'isArticle',
+          operator: FilterOperator.Equals,
+          value: true,
+        },
+      ],
     },
   });
 
-  const { documents: items, hasMore } = data?.ArticleQuery?.list || {};
+  const { documents: items, hasMore } = data?.PageQuery?.list || {};
 
   const handleLoadMore = () => {
     const newPage = page + 1;
@@ -31,16 +38,18 @@ export const List = () => {
   }
 
   return (
-    <DefaultContainer>
+    <Container>
       <InfiniteScroll
         itemsLength={items.length}
         fetchMore={handleLoadMore}
         hasMore={hasMore}
       >
         {items.map((item) => (
-          <div key={item.id} {...item} />
+          <Link key={item.url} route={item.url}>
+            Read article, url: {item.url}
+          </Link>
         ))}
       </InfiniteScroll>
-    </DefaultContainer>
+    </Container>
   );
 };

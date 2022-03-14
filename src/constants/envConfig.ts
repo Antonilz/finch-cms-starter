@@ -9,13 +9,13 @@ type Config = Record<
 
 export const envConfig: Config = {
   PROD: {
-    assetPrefix: 'https://site.dev.finch.fm',
-    apiEndpoint: 'https://site.dev.finch.fm/finch/cms/graphql',
+    assetPrefix: 'https://app.cms.finch.fm',
+    apiEndpoint: 'https://app.cms.finch.fm/finch/cms/graphql',
     isTestEnv: false,
   },
   DEV: {
-    assetPrefix: 'https://site.dev.finch.fm',
-    apiEndpoint: 'https://site.dev.finch.fm/finch/cms/graphql',
+    assetPrefix: 'https://app.cms.finch.fm',
+    apiEndpoint: 'https://app.cms.finch.fm/finch/cms/graphql',
     isTestEnv: true,
   },
 };

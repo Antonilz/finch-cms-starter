@@ -7,7 +7,6 @@ import { HeadScripts, BodyScripts } from '~components/Metrics';
 import { locales } from '~features/i18n';
 import getPageData from '../../model/getPageData.graphql';
 import getPageUrn from '../../model/getPageUrn.graphql';
-import getWebConfigs from '../../model/getWebConfigs.graphql';
 import {
   PageData,
   PageMenuTypes,
@@ -16,30 +15,32 @@ import {
   ConfigData,
 } from '../../types';
 import { View } from '../View';
-import { Hero } from '../Hero';
-import { Block } from '../Block';
+import { Header } from '../Header';
+import { Mosaic } from '../Mosaic';
+import { ArticleList } from '../ArticleList';
+import { ArticleText } from '../ArticleText';
 import { GlobalTheme } from '../GlobalTheme';
 
 const getPageDataByUrn = (data: Array<PageData>) => data[0];
 
 const getPageMenuData = (data: Array<MenuData>, locale: string) =>
   data.find(
-    ({ code }) =>
-      code ===
+    ({ name }) =>
+      name ===
       `${locale !== locales.RU ? `${locale}/` : ''}${PageMenuTypes.MAIN}`
   )?.items;
 
 const getHeadScripts = (configs: Array<ConfigData>) =>
   String.prototype.concat.apply(
     configs
-      .map(({ headscript }) => headscript)
+      .map(({ headScript }) => headScript)
       .filter(Boolean)
       .concat()
   );
 
 const getBodyScripts = (configs: Array<ConfigData>) =>
   String.prototype.concat.apply(
-    configs.map(({ bodyscript }) => bodyscript).filter(Boolean)
+    configs.map(({ bodyScript }) => bodyScript).filter(Boolean)
   );
 
 type MainPageProps = {
@@ -54,14 +55,14 @@ export function MainPage({ pageData, menuData, configs }: MainPageProps) {
     locale = locales.RU,
     isFallback,
   } = useRouter();
-
+  console.log(pageData);
   const data = getPageDataByUrn(pageData);
 
   if (!data || isFallback) {
     return <div>Loading...</div>;
   }
 
-  const { title, description, image, blocks, article, black: dark } = data;
+  const { title, description, image, blocks, isArticle, black: dark } = data;
 
   const pageMenu = getPageMenuData(menuData, locale);
   const bodyScripts = getBodyScripts(configs);
@@ -74,12 +75,20 @@ export function MainPage({ pageData, menuData, configs }: MainPageProps) {
       <View navLinks={pageMenu}>
         <GlobalTheme dark={dark} />
         {blocks.map(({ type, data: blockData }, index) => {
-          if (type === BlockTypes.BLOCK) {
-            return <Block key={index} compact={article} {...blockData} />;
+          if (type === BlockTypes.MOSAIC) {
+            return <Mosaic key={index} compact={isArticle} {...blockData} />;
           }
 
-          if (type === BlockTypes.HERO) {
-            return <Hero key={index} {...blockData} />;
+          if (type === BlockTypes.HEADER) {
+            return <Header key={index} {...blockData} />;
+          }
+
+          if (type === BlockTypes.ARTICLE_TEXT) {
+            return <ArticleText key={index} {...blockData} />;
+          }
+
+          if (type === BlockTypes.ARTICLE_LIST) {
+            return <ArticleList key={index} {...blockData} />;
           }
 
           // if (type === BlockTypes.FORM) {
@@ -111,27 +120,22 @@ export async function getStaticProps(context: GetStaticPropsContext) {
      */
     const pageUrn = urn ? urn[0] : '';
 
-    const [pageDataResponse, configsDataResponse] = await Promise.all([
-      apolloClient.query({
-        query: getPageData,
-        variables: {
-          filters: [
-            {
-              field: 'urn',
-              operator: 'EQUALS',
-              value: `/${locale !== locales.RU ? `${locale}/` : ''}${pageUrn}`,
-            },
-          ],
-        },
-      }),
-      apolloClient.query({
-        query: getWebConfigs,
-      }),
-    ]);
+    const { data } = await apolloClient.query({
+      query: getPageData,
+      variables: {
+        filters: [
+          {
+            field: 'url',
+            operator: 'EQUALS',
+            value: `/${locale !== locales.RU ? `${locale}/` : ''}${pageUrn}`,
+          },
+        ],
+      },
+    });
 
-    const configs = configsDataResponse.data.WebConfigQuery.list.documents;
-    const pageData = pageDataResponse.data.FinchSitePageQuery.list.documents;
-    const menuData = pageDataResponse.data.MenuQuery.list.documents;
+    const configs = data.ScriptConfigQuery.list.documents;
+    const pageData = data.PageQuery.list.documents;
+    const menuData = data.MenuQuery.list.documents;
 
     return addApolloState(apolloClient, {
       props: {
@@ -154,11 +158,10 @@ export async function getStaticPaths() {
     const response = await apolloClient.query({
       query: getPageUrn,
     });
-    const result = response.data.FinchSitePageQuery.list
-      .documents as Array<PageData>;
+    const result = response.data.PageQuery.list.documents as Array<PageData>;
 
     const paths = result.map((page) => ({
-      params: { urn: page.urn ? [page.urn] : null },
+      params: { urn: page.url ? [page.url] : null },
     }));
 
     return {

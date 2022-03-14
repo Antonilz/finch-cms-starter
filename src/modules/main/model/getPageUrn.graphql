@@ -1,9 +1,8 @@
-# Write your query or mutation here
-query PageUrnQuery {
-  FinchSitePageQuery {
+query PageUrn {
+  PageQuery {
     list {
       documents {
-        urn
+        url
       }
     }
   }

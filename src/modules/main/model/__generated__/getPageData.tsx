@@ -1,130 +1,122 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
 import * as Types from '../../../../__generated__/types';
 
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type PageDataQueryQueryVariables = Types.Exact<{
+export type PageDataQueryVariables = Types.Exact<{
   filters?: Types.InputMaybe<
     | Array<Types.InputMaybe<Types.InputFilter>>
     | Types.InputMaybe<Types.InputFilter>
   >;
+  page?: Types.InputMaybe<Types.Scalars['Int']>;
+  pageSize?: Types.InputMaybe<Types.Scalars['Int']>;
 }>;
 
-export type PageDataQueryQuery = {
+export type PageDataQuery = {
   __typename?: 'Query';
-  FinchSitePageQuery:
-    | {
-        __typename?: 'FinchSitePageQuery';
-        list:
-          | {
-              __typename?: 'FinchSitePageList';
-              documents:
-                | Array<
-                    | {
-                        __typename?: 'FinchSitePageOut';
-                        description: string | null | undefined;
-                        lead: any | null | undefined;
-                        title: string | null | undefined;
-                        image: string | null | undefined;
-                        article: boolean | null | undefined;
-                        blocks: any | null | undefined;
-                        urn: string | null | undefined;
-                        black: boolean | null | undefined;
-                      }
-                    | null
-                    | undefined
-                  >
-                | null
-                | undefined;
-            }
-          | null
-          | undefined;
-      }
-    | null
-    | undefined;
-  MenuQuery:
-    | {
-        __typename?: 'MenuQuery';
-        list:
-          | {
-              __typename?: 'MenuList';
-              documents:
-                | Array<
-                    | {
-                        __typename?: 'MenuOut';
-                        items: any | null | undefined;
-                        code: string | null | undefined;
-                      }
-                    | null
-                    | undefined
-                  >
-                | null
-                | undefined;
-            }
-          | null
-          | undefined;
-      }
-    | null
-    | undefined;
+  PageQuery: {
+    __typename?: 'PageQuery';
+    list: {
+      __typename?: 'PageList';
+      hasMore: boolean | null;
+      totalCount: number | null;
+      documents: Array<{
+        __typename?: 'PageOut';
+        title: string | null;
+        description: string | null;
+        url: string | null;
+        image: string | null;
+        blocks: any | null;
+        isArticle: boolean | null;
+      } | null> | null;
+    } | null;
+  } | null;
+  MenuQuery: {
+    __typename?: 'MenuQuery';
+    list: {
+      __typename?: 'MenuList';
+      documents: Array<{
+        __typename?: 'MenuOut';
+        items: any | null;
+        name: string | null;
+      } | null> | null;
+    } | null;
+  } | null;
+  ScriptConfigQuery: {
+    __typename?: 'ScriptConfigQuery';
+    list: {
+      __typename?: 'ScriptConfigList';
+      documents: Array<{
+        __typename?: 'ScriptConfigOut';
+        name: string | null;
+        bodyScript: string | null;
+        headScript: string | null;
+      } | null> | null;
+    } | null;
+  } | null;
 };
 
-export const PageDataQueryDocument = /* #__PURE__ */ gql`
-  query PageDataQuery($filters: [InputFilter]) {
-    FinchSitePageQuery {
-      list(filters: $filters) {
+export const PageDataDocument = /*#__PURE__*/ gql`
+  query PageData($filters: [InputFilter], $page: Int, $pageSize: Int) {
+    PageQuery {
+      list(filters: $filters, page: $page, pageSize: $pageSize) {
         documents {
-          description
-          lead
           title
+          description
+          url
           image
-          article
           blocks
-          urn
-          black
+          isArticle
         }
+        hasMore
+        totalCount
       }
     }
     MenuQuery {
       list {
         documents {
           items
-          code
+          name
+        }
+      }
+    }
+    ScriptConfigQuery {
+      list {
+        documents {
+          name
+          bodyScript
+          headScript
         }
       }
     }
   }
 `;
-export function usePageDataQueryQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    PageDataQueryQuery,
-    PageDataQueryQueryVariables
-  >
+export function usePageDataQuery(
+  baseOptions?: Apollo.QueryHookOptions<PageDataQuery, PageDataQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PageDataQueryQuery, PageDataQueryQueryVariables>(
-    PageDataQueryDocument,
+  return Apollo.useQuery<PageDataQuery, PageDataQueryVariables>(
+    PageDataDocument,
     options
   );
 }
-export function usePageDataQueryLazyQuery(
+export function usePageDataLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    PageDataQueryQuery,
-    PageDataQueryQueryVariables
+    PageDataQuery,
+    PageDataQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PageDataQueryQuery, PageDataQueryQueryVariables>(
-    PageDataQueryDocument,
+  return Apollo.useLazyQuery<PageDataQuery, PageDataQueryVariables>(
+    PageDataDocument,
     options
   );
 }
-export type PageDataQueryQueryHookResult = ReturnType<
-  typeof usePageDataQueryQuery
+export type PageDataQueryHookResult = ReturnType<typeof usePageDataQuery>;
+export type PageDataLazyQueryHookResult = ReturnType<
+  typeof usePageDataLazyQuery
 >;
-export type PageDataQueryLazyQueryHookResult = ReturnType<
-  typeof usePageDataQueryLazyQuery
->;
-export type PageDataQueryQueryResult = Apollo.QueryResult<
-  PageDataQueryQuery,
-  PageDataQueryQueryVariables
+export type PageDataQueryResult = Apollo.QueryResult<
+  PageDataQuery,
+  PageDataQueryVariables
 >;

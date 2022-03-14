@@ -3,10 +3,13 @@ import { Footer } from '~features/layout/components/Footer';
 import { Link } from '~features/ui/types';
 import { Wrapper } from './styles';
 
-export const View: React.FC<{
+type ViewProps = {
   navLinks?: Array<{ data: Link }>;
   email?: string;
-}> = ({ children, navLinks, email }) => {
+  children: React.ReactNode;
+};
+
+export const View = ({ children, navLinks, email }: ViewProps) => {
   return (
     <Wrapper>
       <Header navLinks={navLinks} />

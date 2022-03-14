@@ -15,7 +15,10 @@ export const Header: React.FC<{
   navLinks?: Array<{ data: LinkProps }>;
 }> = ({ navLinks }) => {
   const { isDesktop } = useBreakpoint();
-  const { asPath } = useRouter();
+  const {
+    query: { urn = [] },
+  } = useRouter();
+  const currentHref = `/${urn.join('/')}`;
 
   return (
     <>
@@ -26,7 +29,7 @@ export const Header: React.FC<{
             <StyledLink
               key={index}
               route={href}
-              $isActive={asPath.startsWith(href)}
+              $isActive={href === currentHref}
             >
               {title}
             </StyledLink>

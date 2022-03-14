@@ -1,5 +1,4 @@
 import { Link } from '~features/ui/types';
-import { Hero } from './components/Hero';
 
 type DataField<P, T = string> = Array<{
   data: P;
@@ -7,47 +6,49 @@ type DataField<P, T = string> = Array<{
 }>;
 
 export enum PageMenuTypes {
-  LEAD = 'lead',
   MAIN = 'main',
 }
 
 export type MenuData = {
   items: DataField<Link>;
-  code: string;
+  name: string;
 };
 
-type BlockItem = TextField & {
+export type MosaicItem = TextField & {
   image: string;
-  darkThemeImage: string;
+  width: number;
   href: string;
   buttonHref: string;
   buttonTitle: string;
 };
 
 export const enum BlockTypes {
-  HERO = 'Hero',
-  BLOCK = 'FinchSitePageBlock',
-  INTERVIEW = 'Interview',
+  HEADER = 'Header',
+  MOSAIC = 'Mosaic',
+  ARTICLE_TEXT = 'ArticleText',
+  ARTICLE_LIST = 'ArticleList',
   FORM = 'Form',
 }
 
-export type Block = TextField & {
+export type Mosaic = TextField & {
   type: `${BlockTypes}`;
   tags: DataField<Tag>;
   fulltext?: string;
-  counters: boolean;
-  blocks: DataField<BlockItem>;
+  columnsCount: number;
+  items: DataField<MosaicItem>;
   buttonHref?: string;
   buttonTitle?: string;
   compact?: boolean;
 };
+
+export type ArticleText = { text: string };
 
 type TextField = {
   title: string;
   text: string;
 };
 
-export type Hero = TextField;
+export type Header = TextField;
 
 type Tag = {
   title: string;
@@ -58,8 +59,9 @@ export type Tags = {
 };
 
 export type PageBlocks = {
-  [BlockTypes.HERO]: TextField;
-  [BlockTypes.BLOCK]: Block;
+  [BlockTypes.HEADER]: Header;
+  [BlockTypes.MOSAIC]: Mosaic;
+  [BlockTypes.ARTICLE_TEXT]: ArticleText;
 };
 
 export type PageDataItem = {
@@ -70,17 +72,16 @@ export type PageData = {
   title: string;
   description: string;
   image: string;
-  article: boolean;
+  isArticle: boolean;
   blocks: Array<PageDataItem>;
-  lead: DataField<Interview, BlockTypes.INTERVIEW>;
-  urn: string;
+  url: string;
   black: boolean;
 };
 
 export type ConfigData = {
-  title: string;
-  headscript: string;
-  bodyscript: string;
+  name: string;
+  headScript: string;
+  bodyScript: string;
 };
 
 export type PageListData = {

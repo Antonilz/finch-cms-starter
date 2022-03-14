@@ -10,6 +10,42 @@ enum BeforeOrAfterOperation {
   AFTER
 }
 
+input ButtonElementsIn {
+  id: String
+  name: String!
+  payload: Text
+  ttt: String
+}
+
+type ButtonElementsList {
+  documents: [ButtonElementsOut]
+  totalCount: Int
+  hasMore: Boolean
+}
+
+type ButtonElementsMutation {
+  create(data: ButtonElementsIn!): ButtonElementsOut
+  update(id: String!, data: ButtonElementsIn!): ButtonElementsOut
+  delete(id: String!): Void
+}
+
+type ButtonElementsOut {
+  id: String
+  name: String
+  payload: Text
+  ttt: String
+}
+
+type ButtonElementsQuery {
+  get(id: String!): ButtonElementsOut
+  list(
+    page: Int = 0
+    pageSize: Int = 20
+    filters: [InputFilter]
+    orders: [InputOrder]
+  ): ButtonElementsList
+}
+
 scalar DateTime
 
 enum Direction {
@@ -93,6 +129,44 @@ type Form {
   document: Document
 }
 
+input HeaderElementsIn {
+  id: String
+  name: String
+  payload: Text
+  theme: String
+  figmaUrl: String
+}
+
+type HeaderElementsList {
+  documents: [HeaderElementsOut]
+  totalCount: Int
+  hasMore: Boolean
+}
+
+type HeaderElementsMutation {
+  create(data: HeaderElementsIn!): HeaderElementsOut
+  update(id: String!, data: HeaderElementsIn!): HeaderElementsOut
+  delete(id: String!): Void
+}
+
+type HeaderElementsOut {
+  id: String
+  name: String
+  payload: Text
+  theme: String
+  figmaUrl: String
+}
+
+type HeaderElementsQuery {
+  get(id: String!): HeaderElementsOut
+  list(
+    page: Int = 0
+    pageSize: Int = 20
+    filters: [InputFilter]
+    orders: [InputOrder]
+  ): HeaderElementsList
+}
+
 type History {
   entityId: String
   entityName: String
@@ -114,6 +188,46 @@ type HistoryEntry {
 type HistoryEntryAuthor {
   id: String
   name: String
+}
+
+scalar Image
+
+input InputElementsIn {
+  id: String
+  name: String
+  payload: Text
+  theme: String
+  figmaUrl: String
+}
+
+type InputElementsList {
+  documents: [InputElementsOut]
+  totalCount: Int
+  hasMore: Boolean
+}
+
+type InputElementsMutation {
+  create(data: InputElementsIn!): InputElementsOut
+  update(id: String!, data: InputElementsIn!): InputElementsOut
+  delete(id: String!): Void
+}
+
+type InputElementsOut {
+  id: String
+  name: String
+  payload: Text
+  theme: String
+  figmaUrl: String
+}
+
+type InputElementsQuery {
+  get(id: String!): InputElementsOut
+  list(
+    page: Int = 0
+    pageSize: Int = 20
+    filters: [InputFilter]
+    orders: [InputOrder]
+  ): InputElementsList
 }
 
 input InputFilter {
@@ -139,6 +253,40 @@ scalar Map_String_List_Scalar
 
 scalar Map_String_Map_Scalar
 
+input MenuIn {
+  id: String
+  name: String
+  items: Json!
+}
+
+type MenuList {
+  documents: [MenuOut]
+  totalCount: Int
+  hasMore: Boolean
+}
+
+type MenuMutation {
+  create(data: MenuIn!): MenuOut
+  update(id: String!, data: MenuIn!): MenuOut
+  delete(id: String!): Void
+}
+
+type MenuOut {
+  id: String
+  name: String
+  items: Json
+}
+
+type MenuQuery {
+  get(id: String!): MenuOut
+  list(
+    page: Int = 0
+    pageSize: Int = 20
+    filters: [InputFilter]
+    orders: [InputOrder]
+  ): MenuList
+}
+
 type Meta {
   components: Map_String_EntityDescriptor_Scalar
   embeds: Map_String_EntityDescriptor_Scalar
@@ -155,7 +303,14 @@ type Mutation {
   create(type: String, data: Json, force: Boolean): SaveResult
   update(type: String, id: String, data: Json, force: Boolean): SaveResult
   delete(type: String, id: String): Void
+  ButtonElementsMutation: ButtonElementsMutation
+  HeaderElementsMutation: HeaderElementsMutation
+  MenuMutation: MenuMutation
+  ScriptConfigMutation: ScriptConfigMutation
   UserMutation: UserMutation
+  TextElementsMutation: TextElementsMutation
+  InputElementsMutation: InputElementsMutation
+  PageMutation: PageMutation
 }
 
 enum OperationType {
@@ -165,6 +320,48 @@ enum OperationType {
   DELETE
   TABLE
   AUTOCOMPLETE
+}
+
+input PageIn {
+  id: String
+  url: String!
+  title: String!
+  description: Text
+  image: Image
+  blocks: Json
+  isArticle: Boolean
+}
+
+type PageList {
+  documents: [PageOut]
+  totalCount: Int
+  hasMore: Boolean
+}
+
+type PageMutation {
+  create(data: PageIn!): PageOut
+  update(id: String!, data: PageIn!): PageOut
+  delete(id: String!): Void
+}
+
+type PageOut {
+  id: String
+  url: String
+  title: String
+  description: Text
+  image: Image
+  blocks: Json
+  isArticle: Boolean
+}
+
+type PageQuery {
+  get(id: String!): PageOut
+  list(
+    page: Int = 0
+    pageSize: Int = 20
+    filters: [InputFilter]
+    orders: [InputOrder]
+  ): PageList
 }
 
 type Query {
@@ -186,7 +383,14 @@ type Query {
     filters: [InputFilter]
     orders: [InputOrder]
   ): Table
+  ButtonElementsQuery: ButtonElementsQuery
+  HeaderElementsQuery: HeaderElementsQuery
+  MenuQuery: MenuQuery
+  ScriptConfigQuery: ScriptConfigQuery
   UserQuery: UserQuery
+  TextElementsQuery: TextElementsQuery
+  InputElementsQuery: InputElementsQuery
+  PageQuery: PageQuery
 }
 
 enum Relationship {
@@ -199,6 +403,42 @@ enum Relationship {
 type SaveResult {
   document: Document
   errors: [FieldValidationError]
+}
+
+input ScriptConfigIn {
+  id: String
+  name: String!
+  headScript: Text
+  bodyScript: Text
+}
+
+type ScriptConfigList {
+  documents: [ScriptConfigOut]
+  totalCount: Int
+  hasMore: Boolean
+}
+
+type ScriptConfigMutation {
+  create(data: ScriptConfigIn!): ScriptConfigOut
+  update(id: String!, data: ScriptConfigIn!): ScriptConfigOut
+  delete(id: String!): Void
+}
+
+type ScriptConfigOut {
+  id: String
+  name: String
+  headScript: Text
+  bodyScript: Text
+}
+
+type ScriptConfigQuery {
+  get(id: String!): ScriptConfigOut
+  list(
+    page: Int = 0
+    pageSize: Int = 20
+    filters: [InputFilter]
+    orders: [InputOrder]
+  ): ScriptConfigList
 }
 
 type SecurityRule {
@@ -222,6 +462,46 @@ type Table {
   documents: [Document]
   hasMore: Boolean
   totalCount: Long
+}
+
+scalar Text
+
+input TextElementsIn {
+  id: String
+  name: String!
+  payload: Text
+  theme: String
+  figmaUrl: String
+}
+
+type TextElementsList {
+  documents: [TextElementsOut]
+  totalCount: Int
+  hasMore: Boolean
+}
+
+type TextElementsMutation {
+  create(data: TextElementsIn!): TextElementsOut
+  update(id: String!, data: TextElementsIn!): TextElementsOut
+  delete(id: String!): Void
+}
+
+type TextElementsOut {
+  id: String
+  name: String
+  payload: Text
+  theme: String
+  figmaUrl: String
+}
+
+type TextElementsQuery {
+  get(id: String!): TextElementsOut
+  list(
+    page: Int = 0
+    pageSize: Int = 20
+    filters: [InputFilter]
+    orders: [InputOrder]
+  ): TextElementsList
 }
 
 enum TransactionOutboxOperationType {

@@ -1,10 +1,10 @@
-query GetWebConfigs($filters: [InputFilter]) {
-  WebConfigQuery {
+query GetScriptConfigs($filters: [InputFilter]) {
+  ScriptConfigQuery {
     list(filters: $filters) {
       documents {
-        title
-        bodyscript
-        headscript
+        name
+        bodyScript
+        headScript
       }
     }
   }

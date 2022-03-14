@@ -1,88 +1,75 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
 import * as Types from '../../../../__generated__/types';
 
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type GetWebConfigsQueryVariables = Types.Exact<{
+export type GetScriptConfigsQueryVariables = Types.Exact<{
   filters?: Types.InputMaybe<
     | Array<Types.InputMaybe<Types.InputFilter>>
     | Types.InputMaybe<Types.InputFilter>
   >;
 }>;
 
-export type GetWebConfigsQuery = {
+export type GetScriptConfigsQuery = {
   __typename?: 'Query';
-  WebConfigQuery:
-    | {
-        __typename?: 'WebConfigQuery';
-        list:
-          | {
-              __typename?: 'WebConfigList';
-              documents:
-                | Array<
-                    | {
-                        __typename?: 'WebConfigOut';
-                        title: string | null | undefined;
-                        bodyscript: string | null | undefined;
-                        headscript: string | null | undefined;
-                      }
-                    | null
-                    | undefined
-                  >
-                | null
-                | undefined;
-            }
-          | null
-          | undefined;
-      }
-    | null
-    | undefined;
+  ScriptConfigQuery: {
+    __typename?: 'ScriptConfigQuery';
+    list: {
+      __typename?: 'ScriptConfigList';
+      documents: Array<{
+        __typename?: 'ScriptConfigOut';
+        name: string | null;
+        bodyScript: string | null;
+        headScript: string | null;
+      } | null> | null;
+    } | null;
+  } | null;
 };
 
-export const GetWebConfigsDocument = /* #__PURE__ */ gql`
-  query GetWebConfigs($filters: [InputFilter]) {
-    WebConfigQuery {
+export const GetScriptConfigsDocument = /*#__PURE__*/ gql`
+  query GetScriptConfigs($filters: [InputFilter]) {
+    ScriptConfigQuery {
       list(filters: $filters) {
         documents {
-          title
-          bodyscript
-          headscript
+          name
+          bodyScript
+          headScript
         }
       }
     }
   }
 `;
-export function useGetWebConfigsQuery(
+export function useGetScriptConfigsQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetWebConfigsQuery,
-    GetWebConfigsQueryVariables
+    GetScriptConfigsQuery,
+    GetScriptConfigsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetWebConfigsQuery, GetWebConfigsQueryVariables>(
-    GetWebConfigsDocument,
+  return Apollo.useQuery<GetScriptConfigsQuery, GetScriptConfigsQueryVariables>(
+    GetScriptConfigsDocument,
     options
   );
 }
-export function useGetWebConfigsLazyQuery(
+export function useGetScriptConfigsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetWebConfigsQuery,
-    GetWebConfigsQueryVariables
+    GetScriptConfigsQuery,
+    GetScriptConfigsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetWebConfigsQuery, GetWebConfigsQueryVariables>(
-    GetWebConfigsDocument,
-    options
-  );
+  return Apollo.useLazyQuery<
+    GetScriptConfigsQuery,
+    GetScriptConfigsQueryVariables
+  >(GetScriptConfigsDocument, options);
 }
-export type GetWebConfigsQueryHookResult = ReturnType<
-  typeof useGetWebConfigsQuery
+export type GetScriptConfigsQueryHookResult = ReturnType<
+  typeof useGetScriptConfigsQuery
 >;
-export type GetWebConfigsLazyQueryHookResult = ReturnType<
-  typeof useGetWebConfigsLazyQuery
+export type GetScriptConfigsLazyQueryHookResult = ReturnType<
+  typeof useGetScriptConfigsLazyQuery
 >;
-export type GetWebConfigsQueryResult = Apollo.QueryResult<
-  GetWebConfigsQuery,
-  GetWebConfigsQueryVariables
+export type GetScriptConfigsQueryResult = Apollo.QueryResult<
+  GetScriptConfigsQuery,
+  GetScriptConfigsQueryVariables
 >;

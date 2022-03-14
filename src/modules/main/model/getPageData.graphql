@@ -1,23 +1,32 @@
-query PageDataQuery($filters: [InputFilter]) {
-  FinchSitePageQuery {
-    list(filters: $filters) {
+query PageData($filters: [InputFilter], $page: Int, $pageSize: Int) {
+  PageQuery {
+    list(filters: $filters, page: $page, pageSize: $pageSize) {
       documents {
-        description
-        lead
         title
+        description
+        url
         image
-        article
         blocks
-        urn
-        black
+        isArticle
       }
+      hasMore
+      totalCount
     }
   }
   MenuQuery {
     list {
       documents {
         items
-        code
+        name
+      }
+    }
+  }
+  ScriptConfigQuery {
+    list {
+      documents {
+        name
+        bodyScript
+        headScript
       }
     }
   }

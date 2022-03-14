@@ -9,7 +9,9 @@ export const CommonStyles = createGlobalStyle`
 
   html {
     font-size: 100%;
-    scroll-behavior: smooth;
+    scroll-behavior: smooth; 
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
   }
 
   body {
@@ -17,8 +19,7 @@ export const CommonStyles = createGlobalStyle`
     margin: 0;
     min-width: 320px;
     width: 100%;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+    height: 100%;
   }
 
   /* Remove inner shadow of input in Safari */

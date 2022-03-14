@@ -6,7 +6,7 @@ import { Container } from '../../../ui/components/Container';
 
 export const headerHeight = 100;
 
-export const Wrapper = styled(Container)`
+export const Wrapper = styled(Container).attrs({ as: 'header' })`
   flex-direction: row;
   display: flex;
   justify-content: space-between;

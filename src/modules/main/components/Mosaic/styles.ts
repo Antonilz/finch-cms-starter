@@ -192,20 +192,17 @@ export const Item = styled(DefaultLink).attrs(
 `;
 
 export const Container = styled.div<{
-  sizeType?: `${BlockSizeVariants}`;
+  $columnCount: number;
 }>`
-  ${({ sizeType }) => css`
+  ${({ $columnCount }) => css`
     display: grid;
-    gap: ${paddings.lg / 2}px;
-    margin-bottom: 40px;
-    grid-template-columns: ${sizeType === BlockSizeVariants.DEFAULT
-      ? 'repeat(1, 1fr)'
-      : 'repeat(2, 1fr)'};
+    gap: 20px;
+    grid-template-columns: repeat(${$columnCount}, 1fr);
 
     ${media.down('md')} {
       grid-template-columns: repeat(1, 1fr);
 
-      && > ${Item} {
+      && > * {
         grid-column: 1/2;
       }
     }
